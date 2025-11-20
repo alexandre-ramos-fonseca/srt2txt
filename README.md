@@ -1,132 +1,108 @@
-# 📝 Conversor SRT → TXT
+# 📝 SRT → TXT Converter
 
-Este projeto converte arquivos **.srt** (legendas) em arquivos **.txt**, removendo números, timestamps e unificando linhas.  
-Também é possível manter parágrafos correspondentes aos blocos de legenda originais.
+This project converts **.srt** subtitle files into **.txt** files, removing index numbers, timestamps, and merging broken lines.  
+It can also preserve paragraphs corresponding to the original subtitle blocks.
 
 ---
 
-## 🚀 Funcionalidades
+## 🚀 Features
 
-- Converte arquivos `.srt` em `.txt` automaticamente  
-- Remove:
-  - números das legendas
+- Automatically converts `.srt` files to `.txt`
+- Removes:
+  - subtitle index numbers
   - timestamps (`00:00:01,000 --> 00:00:03,000`)
-- Junta linhas quebradas em texto corrido
-- **Opcional:** mantém parágrafos conforme blocos do SRT (`-p`)
-- Detecta automaticamente codificação UTF-8 ou Latin-1
-- Gera arquivo de saída com **o mesmo nome do SRT** (ex.: `video.srt → video.txt`)
-- Possui interface interativa opcional
+- Joins multi-line subtitles into continuous text
+- **Optional:** keeps paragraph structure based on SRT blocks (`-p`)
+- Automatically detects UTF-8 or Latin-1 encodings
+- Generates output file with **the same name as the SRT** (e.g., `video.srt → video.txt`)
+- Includes an optional interactive interface
 
 ---
 
-## 📦 Instalação
+## 📌 Command-line usage
 
-Nenhuma dependência externa é necessária além do Python 3.
-
-Clone o repositório:
+### Convert a file (generates `file.txt`)
 
 ```bash
-git clone https://seu_repositorio_aqui.git
-cd conversor-srt
+python srt2txt.py subtitles.srt
 ```
 
-Ou apenas baixe o arquivo `srt2txt.py`.
-
----
-
-## 📌 Uso via linha de comando
-
-### Converter um arquivo (gera `arquivo.txt`)
+### Convert while keeping paragraphs
 
 ```bash
-python srt2txt.py legenda.srt
+python srt2txt.py subtitles.srt -p
 ```
 
-### Converter mantendo parágrafos
+### Specify an output file manually
 
 ```bash
-python srt2txt.py legenda.srt -p
-```
-
-### Especificar arquivo de saída manualmente
-
-```bash
-python srt2txt.py legenda.srt -o saida.txt
+python srt2txt.py subtitles.srt -o output.txt
 ```
 
 ---
 
-## 📋 Exemplos
+## 📋 Examples
 
-### Entrada (`exemplo.srt`)
+### Input (`example.srt`)
 
 ```
 1
 00:00:01,000 --> 00:00:02,000
-Olá, pessoal.
+Hello, everyone.
 
 2
 00:00:02,500 --> 00:00:04,000
-Sejam bem-vindos!
+Welcome!
 ```
 
-### Saída (`exemplo.txt`)
+### Output (`example.txt`)
 
 ```
-Olá, pessoal. Sejam bem-vindos!
+Hello, everyone. Welcome!
 ```
 
-### Saída com `-p`
+### Output with `-p`
 
 ```
-Olá, pessoal.
+Hello, everyone.
 
-Sejam bem-vindos!
+Welcome!
 ```
 
 ---
 
-## 🖥️ Interface interativa
+## 🖥️ Interactive interface
 
-Executar sem argumentos:
+Run without arguments:
 
 ```bash
 python srt2txt.py
 ```
 
----
-
-## 📚 Estrutura do projeto
-
-```
-srt2txt.py
-README.md
-```
+The script enters a simple terminal-based interactive mode.
 
 ---
 
-## ⚙️ Requisitos
+## ⚙️ Requirements
 
 - Python **3.8+**
 
 ---
 
-## 🔧 Possíveis melhorias futuras
+## 🔧 Possible future improvements
 
-- Remover marcas como `[MÚSICA]`, `<i>...</i>`, `(risos)`  
-- Suporte a conversão em lote (`*.srt`)  
-- Suporte a pipes (`cat video.srt | python srt2txt.py`)  
-- Integração com Whisper (transcrever áudio + gerar SRT + converter)
+- Remove subtitle tags such as `[MUSIC]`, `<i>...</i>`, `(laughs)`  
+- Batch conversion support (`*.srt`)  
+- Pipe support (`cat video.srt | python srt2txt.py`)  
+- Whisper integration (transcribe audio + generate SRT + convert)
 
 ---
 
-## 📝 Licença
+## 📝 License
 
-Este projeto é distribuído sob a licença **MIT**.
+This project is distributed under the **MIT** license.
 
-Você pode usar, copiar, modificar, mesclar, publicar, distribuir e até vender
-este software livremente, desde que mantenha o aviso de copyright.
+You are free to use, copy, modify, merge, publish, distribute, and even sell
+this software, provided that the original copyright notice is preserved.
 
-Consulte o arquivo `LICENSE` para mais informações.
-
-
+See the `LICENSE` file for more details.
