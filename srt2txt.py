@@ -1,8 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Script para converter arquivos SRT em texto corrido ou com parágrafos.
+srt2txt.py — Conversor SRT → TXT
+Copyright (c) 2025 Alexandre Ramos Fonseca
+Licença: MIT (consulte o arquivo LICENSE para detalhes)
+
+Permissão é concedida, gratuitamente, para qualquer pessoa obter uma cópia
+deste software e dos arquivos de documentação associados (o "Software"),
+para usar o Software sem restrições, incluindo, sem limitação, os direitos
+de usar, copiar, modificar, mesclar, publicar, distribuir, sublicenciar
+e/ou vender cópias do Software.
+O Software é fornecido "como está", sem garantia de qualquer tipo.
 """
+
 
 from __future__ import annotations
 
@@ -136,10 +146,12 @@ def processar_srt(
 
     if arquivo_saida:
         try:
-            Path(arquivo_saida).write_text(texto_corrido, encoding="utf-8")
+            # Garante quebra de linha no final do arquivo
+            Path(arquivo_saida).write_text(texto_corrido + "\n", encoding="utf-8")
             print(f"Texto salvo em: {arquivo_saida}")
         except OSError as e:
             print(f"Erro ao salvar arquivo '{arquivo_saida}': {e}")
+
 
     return texto_corrido
 
@@ -165,10 +177,12 @@ def processar_srt_com_paragrafos(
 
     if arquivo_saida:
         try:
-            Path(arquivo_saida).write_text(texto_final, encoding="utf-8")
+            # Também garante quebra de linha ao final
+            Path(arquivo_saida).write_text(texto_final + "\n", encoding="utf-8")
             print(f"Texto com parágrafos salvo em: {arquivo_saida}")
         except OSError as e:
             print(f"Erro ao salvar arquivo '{arquivo_saida}': {e}")
+
 
     return texto_final
 
@@ -183,7 +197,10 @@ def main(argv: Optional[list[str]] = None) -> int:
         "-o",
         "--output",
         metavar="ARQUIVO",
-        help="Arquivo de saída (opcional). Se omitido, imprime na tela.",
+        help=(
+            "Arquivo de saída (opcional). "
+            "Se omitido, será usado o mesmo nome do SRT com extensão .txt."
+        ),
     )
     parser.add_argument(
         "-p",
@@ -199,21 +216,23 @@ def main(argv: Optional[list[str]] = None) -> int:
         print(f"Erro: Arquivo '{caminho_srt}' não encontrado.")
         return 1
 
-    if args.paragrafos:
-        resultado = processar_srt_com_paragrafos(caminho_srt, args.output)
+    # <<< NOVO COMPORTAMENTO >>>
+    # Se não foi passado -o/--output, gera automaticamente nome .txt
+    if args.output:
+        caminho_saida = Path(args.output)
     else:
-        resultado = processar_srt(caminho_srt, args.output)
+        caminho_saida = caminho_srt.with_suffix(".txt")
+
+    if args.paragrafos:
+        resultado = processar_srt_com_paragrafos(caminho_srt, caminho_saida)
+    else:
+        resultado = processar_srt(caminho_srt, caminho_saida)
 
     if resultado is None:
         print("Falha ao processar o arquivo SRT.")
         return 1
 
-    if not args.output:
-        print("\n" + "=" * 50)
-        print("TEXTO EXTRAÍDO:")
-        print("=" * 50)
-        print(resultado)
-
+    # Não imprime mais o texto na tela nem o cabeçalho "TEXTO EXTRAÍDO"
     return 0
 
 
@@ -255,9 +274,8 @@ def interface_simples() -> None:
                 resultado = processar_srt_com_paragrafos(caminho, arquivo_saida)
 
             if resultado and not arquivo_saida:
-                print("\n" + "=" * 50)
-                print("RESULTADO:")
-                print("=" * 50)
+                # Imprime só o texto, sem moldura
+                print()
                 print(resultado)
 
         else:

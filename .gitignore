@@ -1,4 +1,6 @@
+# Arquivos de texto e legendas
 *.srt
+*.txt
 
 
 # Byte-compiled / optimized / DLL files
